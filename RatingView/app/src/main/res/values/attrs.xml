@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--NumberProgressBar-->
+    <declare-styleable name="RatingView">
+        <attr name="rating_current" format="integer"/>
+        <attr name="rating_max" format="integer"/>
+
+        <attr name="rating_unrated_color" format="color"/>
+        <attr name="rating_rated_color" format="color"/>
+
+        <attr name="rating_rated_bar_height" format="dimension"/>
+        <attr name="rating_unrated_bar_height" format="dimension"/>
+
+        <attr name="rating_text_size" format="dimension"/>
+        <attr name="rating_text_color" format="color"/>
+
+        <attr name="rating_title_size" format="dimension"/>
+        <attr name="rating_title_color" format="color"/>
+        <attr name="rating_title" format="string" />
+
+        <attr name="rating_text_offset" format="dimension"/>
+
+        <attr name="rating_text_visibility" format="enum">
+            <enum name="visible" value="0"/>
+            <enum name="invisible" value="1"/>
+        </attr>
+
+        <attr name="rating_title_visibility" format="enum">
+            <enum name="visible" value="0"/>
+            <enum name="invisible" value="1"/>
+        </attr>
+    </declare-styleable>
+
+</resources>
