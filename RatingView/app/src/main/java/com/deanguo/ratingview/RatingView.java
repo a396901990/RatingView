@@ -1,119 +1,40 @@
 package com.deanguo.ratingview;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.text.TextUtils;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+
+import java.util.ArrayList;
 
 /**
- * Created by DeanGuo on 12/20/15.
+ * Created by DeanGuo on 12/22/15.
  */
 public class RatingView extends View {
 
-    /**
-     * The rated area bar color.
-     */
-    private int mRatedBarColor;
+    boolean isShow = false;
 
-    /**
-     * The bar unrated area color.
-     */
-    private int mUnratedBarColor;
+    private static final int STROKE_OFFSET = 10;
 
-    /**
-     * The rating text color.
-     */
-    private int mTextColor;
+    private static final long ROTATING_ANIMATION_DURATION = 3000L;
 
-    /**
-     * The rating text size.
-     */
-    private float mTextSize;
+    private static final long RATING_ANIMATION_DURATION = 3000L;
 
-    /**
-     * The rating title color.
-     */
-    private int mTitleColor;
+    private static final long TEXT_ANIMATION_DURATION = 1000L;
 
-    /**
-     * The rating title size.
-     */
-    private float mTitleSize;
+    private int mCenterX, mCenterY;
 
-    /**
-     * The height of the rated area.
-     */
-    private float mRatedBarHeight;
+    private float rotateAngle;
 
-    /**
-     * The height of the unrated area.
-     */
-    private float mUnratedBarHeight;
+    private int ratingGap = -1, textAlpha = 0;
 
-    /**
-     * The Paint of the reached area.
-     */
-    private Paint mRatedBarPaint;
-    /**
-     * The Paint of the unreached area.
-     */
-    private Paint mUnratedBarPaint;
-    /**
-     * The Paint of the progress text.
-     */
-    private Paint mTextPaint;
+    private ArrayList<RatingBar> mRatingBars;
 
-    /**
-     * The Paint of the progress text title.
-     */
-    private Paint mTitlePaint;
-
-    /**
-     * Unrated bar area to draw rect.
-     */
-    private RectF mUnratedRectF = new RectF(0, 0, 0, 0);
-    /**
-     * Rated bar area rect.
-     */
-    private RectF mRatedRectF = new RectF(0, 0, 0, 0);
-
-    /**
-     * The rating text offset.
-     */
-    private float mOffset;
-
-    /**
-     * The text that to be drawn in onDraw().
-     */
-    private String mText;
-
-    /**
-     * The title that to be drawn in onDraw().
-     */
-    private String mTitle;
-
-    private boolean mIfDrawText = true;
-
-    private boolean mIfDrawTitle = true;
-
-    private final int default_text_color = Color.rgb(66, 145, 241);
-    private final int default_rated_color = Color.rgb(66, 145, 241);
-    private final int default_unrated_color = Color.rgb(204, 204, 204);
-    private final float default_rating_text_offset = dp2px(1.5f);
-    private final float default_text_size = dp2px(1.0f);
-    private final float default_rated_bar_height = sp2px(10);
-    private final float default_unrated_bar_height = dp2px(3.0f);
-
-    public enum ProgressTextVisibility {
-        Visible, Invisible
-    }
-
-    private static final int RATING_TEXT_VISIBLE = 0;
-    private static final int RATING_TITLE_VISIBLE = 0;
+    private ValueAnimator rotateAnimator, ratingAnimator,  textAnimator;
 
     public RatingView(Context context) {
         super(context);
@@ -121,68 +42,159 @@ public class RatingView extends View {
 
     public RatingView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        mRatingBars = new ArrayList<>();
+        initRotatingAnimation();
+        initRatingAnimation();
+        initTextAnimation();
     }
 
-    public RatingView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    private void initTextAnimation() {
+        textAnimator = ValueAnimator.ofInt(0, 255);
+        textAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                textAlpha = (int) animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+        textAnimator.setDuration(TEXT_ANIMATION_DURATION);
+        textAnimator.setInterpolator(new AccelerateInterpolator());
+    }
 
-        //load styled attributes.
-        final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.RatingView,
-                defStyleAttr, 0);
+    public void initRotatingAnimation() {
+        rotateAnimator = ValueAnimator.ofFloat(0.0f, 360f * 3);
+        rotateAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                rotateAngle = (float) animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+        rotateAnimator.setDuration(ROTATING_ANIMATION_DURATION);
+        rotateAnimator.setInterpolator(new AccelerateInterpolator());
 
-        mRatedBarColor = attributes.getColor(R.styleable.RatingView_rating_rated_color, default_rated_color);
-        mUnratedBarColor = attributes.getColor(R.styleable.RatingView_rating_unrated_color, default_unrated_color);
-        mTextColor = attributes.getColor(R.styleable.RatingView_rating_text_color, default_text_color);
-        mTextSize = attributes.getDimension(R.styleable.RatingView_rating_text_size, default_text_size);
+        rotateAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
 
-        mTitle = attributes.getString(R.styleable.RatingView_rating_title);
-        if (TextUtils.isEmpty(mTitle)) {
-            mTitle = "";
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                textAnimator.start();
+                ratingAnimator.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    public void initRatingAnimation() {
+        ratingAnimator = ValueAnimator.ofInt(0, 9);
+        ratingAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                ratingGap = (int) animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+        ratingAnimator.setDuration(RATING_ANIMATION_DURATION);
+        ratingAnimator.setInterpolator(new LinearInterpolator());
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        mCenterX = w / 2;
+        mCenterY = h / 2;
+        initRatingBar();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        if (isShow) {
+            canvas.save();
+            canvas.rotate(rotateAngle, mCenterX, mCenterY);
+            for (RatingBar ratingBar : mRatingBars) {
+                ratingBar.drawOutLine(canvas);
+            }
+            canvas.restore();
+
+            canvas.save();
+            canvas.rotate(-rotateAngle, mCenterX, mCenterY);
+            for (RatingBar ratingBar : mRatingBars) {
+                ratingBar.drawUnRate(canvas);
+                ratingBar.drawShadow(canvas);
+            }
+            canvas.restore();
+
+            if (ratingGap != -1) {
+                for (RatingBar ratingBar : mRatingBars) {
+                    for (int rate = 0; rate < ratingBar.getRate(); rate++) {
+                        if (rate <= ratingGap) {
+                            ratingBar.drawRate(canvas, rate);
+                        }
+                    }
+                }
+            }
+
+            for (RatingBar ratingBar : mRatingBars) {
+                ratingBar.drawName(canvas, textAlpha);
+            }
         }
-        mTitleColor = attributes.getColor(R.styleable.RatingView_rating_title_color, Color.WHITE);
-        mTitleSize = attributes.getDimension(R.styleable.RatingView_rating_title_size, default_text_size);
+    }
 
-        mRatedBarHeight = attributes.getDimension(R.styleable.RatingView_rating_rated_bar_height, default_rated_bar_height);
-        mUnratedBarHeight = attributes.getDimension(R.styleable.RatingView_rating_unrated_bar_height, default_unrated_bar_height);
-        mOffset = attributes.getDimension(R.styleable.RatingView_rating_text_offset, default_rating_text_offset);
+    public void addRatingBar(RatingBar ratingBar) {
+        mRatingBars.add(ratingBar);
+    }
 
-        int textVisible = attributes.getInt(R.styleable.RatingView_rating_text_visibility, RATING_TEXT_VISIBLE);
-        if (textVisible != RATING_TEXT_VISIBLE) {
-            mIfDrawText = false;
+    public void removeRatingBar(RatingBar ratingBar) {
+        mRatingBars.remove(ratingBar);
+    }
+
+    public void removeAllRatingBar() {
+        mRatingBars.retainAll(mRatingBars);
+    }
+
+    public void show() {
+        initRatingBar();
+        rotateAnimator.start();
+        isShow = true;
+    }
+
+    private void initRatingBar() {
+
+        int dividePart = mRatingBars.size();
+
+        int sweepAngle = dividePart == 1 ? 360 : (360 - dividePart * STROKE_OFFSET) / dividePart;
+
+        int rotateOffset = dividePart == 1 ? 90 : 90 + sweepAngle / 2;
+
+        for (int i = 0; i < dividePart; i++) {
+            float startAngle = i * (sweepAngle + STROKE_OFFSET) - rotateOffset;
+            RatingBar ratingBar = mRatingBars.get(i);
+            // only show one rating bar
+            if (dividePart == 1) {
+                ratingBar.setIsSingle(true);
+            }
+            ratingBar.setCenterX(mCenterX);
+            ratingBar.setCenterY(mCenterY);
+            ratingBar.setStartAngle(startAngle);
+            ratingBar.setSweepAngle(sweepAngle);
+            ratingBar.init();
         }
 
-        int titleVisible = attributes.getInt(R.styleable.RatingView_rating_title_visibility, RATING_TITLE_VISIBLE);
-        if (titleVisible != RATING_TITLE_VISIBLE) {
-            mIfDrawTitle = false;
-        }
-
-        attributes.recycle();
-        initPaint();
-    }
-
-    private void initPaint() {
-        mRatedBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mRatedBarPaint.setColor(mRatedBarColor);
-
-        mUnratedBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mUnratedBarPaint.setColor(mUnratedBarColor);
-
-        mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint.setColor(mTextColor);
-        mTextPaint.setTextSize(mTextSize);
-
-        mTitlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mTitlePaint.setColor(mTitleColor);
-        mTitlePaint.setTextSize(mTitleSize);
-    }
-
-    public float dp2px(float dp) {
-        final float scale = getResources().getDisplayMetrics().density;
-        return dp * scale + 0.5f;
-    }
-
-    public float sp2px(float sp) {
-        final float scale = getResources().getDisplayMetrics().scaledDensity;
-        return sp * scale;
     }
 }

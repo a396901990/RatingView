@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--NumberProgressBar-->
-    <declare-styleable name="RatingView">
+    <declare-styleable name="RatingViewTest">
         <attr name="rating_current" format="integer"/>
         <attr name="rating_max" format="integer"/>
 
