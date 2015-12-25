@@ -14,15 +14,19 @@ import java.util.ArrayList;
  */
 public class RatingBar {
 
-    public static final int ITEM_OFFSET = 1;
+    private static final int ITEM_OFFSET = 1;
 
     private static final int SHADOW_ALPHA = (int) (255 * 0.2); // 20%
 
-    private static final int UN_RATING_ALPHA = (int) (255 * 0.4); // 40%
+    private static final int UN_RATING_ALPHA = (int) (255 * 0.3); // 30%
 
     private static final int RATING_ALPHA = (int) (255 * 1.0); // 100%
 
+    private static final int OUTLINE_ALPHA = (int) (255 * 0.4); // 40%
+
     private boolean isSingle = false;
+
+    private boolean isShowTitle = true;
 
     private int outlineWidth, ratingBarWidth, shadowWidth, textWidth;
 
@@ -37,22 +41,30 @@ public class RatingBar {
     private ArrayList<Rate> rates;
 
     private Paint ratedPaint, unRatedPaint, shadowPaint, outlinePaint;
-    private TextPaint textPaint;
+    private TextPaint titlePaint;
 
     private int mRadius;
 
-    private String mName;
+    private String mTitle;
 
     private int mCenterX, mCenterY;
 
     private RectF outlineOval, ratingOval, shadowOval;
 
-    public RatingBar(int curRate, String name) {
+    public RatingBar(int curRate, String title) {
         this.mCurRate = curRate;
-        this.mName = name;
+        this.mTitle = title;
+
+        outlinePaint = new Paint();
+        ratedPaint = new Paint();
+        unRatedPaint = new Paint();
+        shadowPaint = new Paint();
+        titlePaint = new TextPaint();
+        // set default color
+        setRatingBarColor(Color.WHITE);
     }
 
-    public void init() {
+    protected void init() {
         // in this order to init
         initRatingBar();
         initOval();
@@ -101,39 +113,29 @@ public class RatingBar {
 
     private void initPaint() {
 
-        outlinePaint = new Paint();
         outlinePaint.setAntiAlias(true);
         outlinePaint.setStyle(Paint.Style.STROKE);
-        outlinePaint.setColor(Color.WHITE);
         outlinePaint.setStrokeWidth(outlineWidth);
-        outlinePaint.setAlpha(UN_RATING_ALPHA);
+        outlinePaint.setAlpha(OUTLINE_ALPHA);
 
-        ratedPaint = new Paint();
         ratedPaint.setAntiAlias(true);
         ratedPaint.setStyle(Paint.Style.STROKE);
-        ratedPaint.setColor(Color.WHITE);
         ratedPaint.setStrokeWidth(ratingBarWidth);
         ratedPaint.setAlpha(RATING_ALPHA);
 
-        unRatedPaint = new Paint();
         unRatedPaint.setAntiAlias(true);
         unRatedPaint.setStyle(Paint.Style.STROKE);
-        unRatedPaint.setColor(Color.WHITE);
         unRatedPaint.setStrokeWidth(ratingBarWidth);
         unRatedPaint.setAlpha(UN_RATING_ALPHA);
 
-        shadowPaint = new Paint();
         shadowPaint.setAntiAlias(true);
         shadowPaint.setStyle(Paint.Style.STROKE);
         shadowPaint.setStrokeWidth(shadowWidth);
-        shadowPaint.setColor(Color.WHITE);
         shadowPaint.setAlpha(SHADOW_ALPHA);
 
-        textPaint = new TextPaint();
-        textPaint.setAntiAlias(true);
-        textPaint.setTextSize(textWidth);
-        textPaint.setColor(Color.WHITE);
-        textPaint.setAlpha(RATING_ALPHA);
+        titlePaint.setAntiAlias(true);
+        titlePaint.setTextSize(textWidth);
+        titlePaint.setAlpha(RATING_ALPHA);
     }
 
     private void initRatingBar() {
@@ -152,55 +154,65 @@ public class RatingBar {
         }
     }
 
-    public void drawUnRate(Canvas canvas) {
+    protected void drawUnRate(Canvas canvas) {
         for (Rate arc : rates) {
             arc.drawArc(canvas, ratingOval, unRatedPaint);
         }
     }
 
-    public void drawRate(Canvas canvas, int index) {
+    protected void drawRate(Canvas canvas, int index) {
+        if (index >= maxRate) {
+            return;
+        }
         Rate arc = rates.get(index);
         arc.drawArc(canvas, ratingOval, ratedPaint);
     }
 
-    public void drawShadow(Canvas canvas) {
+    protected void drawShadow(Canvas canvas) {
         for (Rate arc : rates) {
             arc.drawArc(canvas, shadowOval, shadowPaint);
         }
     }
 
-    public void drawName(Canvas canvas, int alpha) {
-        Path path = new Path();
-        float circumference = (float) (Math.PI * (outlineOval.right - outlineOval.left));
-        float textAngle = (360 / circumference) * textPaint.measureText(getName());
+    protected void drawTitle(Canvas canvas, int alpha) {
+        if (alpha > 0 && isShowTitle) {
+            Path path = new Path();
+            float circumference = (float) (Math.PI * (outlineOval.right - outlineOval.left));
+            float textAngle = (360 / circumference) * titlePaint.measureText(getTitle());
 
-        float startAngle = mStartAngle + mSweepAngle / 2 - textAngle / 2;
+            float startAngle = mStartAngle + mSweepAngle / 2 - textAngle / 2;
 
-        if (isSingle) {
-            // when single, draw 360 the path will be a circle
-            path.addArc(outlineOval, startAngle - mSweepAngle / 2, mSweepAngle / 2);
-        } else {
-            path.addArc(outlineOval, startAngle, mSweepAngle);
+            if (isSingle) {
+                // when single, draw 360 the path will be a circle
+                path.addArc(outlineOval, startAngle - mSweepAngle / 2, mSweepAngle / 2);
+            } else {
+                path.addArc(outlineOval, startAngle, mSweepAngle);
+            }
+
+            titlePaint.setAlpha(alpha);
+            canvas.drawTextOnPath(mTitle, path, 0, textWidth / 3, titlePaint);
         }
-
-        textPaint.setAlpha(alpha);
-        canvas.drawTextOnPath(mName, path, 0 , textWidth / 3 , textPaint);
     }
 
-    public void drawOutLine(Canvas canvas) {
+    protected void drawOutLine(Canvas canvas) {
 
         float circumference = (float) (Math.PI * (outlineOval.right - outlineOval.left));
-        float textAngle = (360 / circumference) * textPaint.measureText(getName());
+        float textAngle = (360 / circumference) * titlePaint.measureText(getTitle());
 
         float sweepAngle = (mSweepAngle - textAngle - 1 - 1) / 2;
-        // text left
-        float leftStartAngle = mStartAngle;
-        canvas.drawArc(outlineOval, leftStartAngle, sweepAngle, false, outlinePaint);
-        // text right
-        float rightStartAngle = mStartAngle + mSweepAngle - sweepAngle;
-        canvas.drawArc(outlineOval, rightStartAngle, sweepAngle, false, outlinePaint);
 
-        // canvas.drawArc(outlineOval, mStartAngle, mSweepAngle, false, outlinePaint);
+        if (isShowTitle) {
+            // text left
+            float leftStartAngle = mStartAngle;
+            canvas.drawArc(outlineOval, leftStartAngle, sweepAngle, false, outlinePaint);
+            // text right
+            float rightStartAngle = mStartAngle + mSweepAngle - sweepAngle;
+            canvas.drawArc(outlineOval, rightStartAngle, sweepAngle, false, outlinePaint);
+        } else {
+            canvas.drawArc(outlineOval, mStartAngle, mSweepAngle, false, outlinePaint);
+        }
+
+
     }
 
     public void setMaxRate(int maxRate) {
@@ -215,36 +227,64 @@ public class RatingBar {
         return mCurRate;
     }
 
-    public void setStartAngle(float mStartAngle) {
+    protected void setStartAngle(float mStartAngle) {
         this.mStartAngle = mStartAngle;
     }
 
-    public void setSweepAngle(float mSweepAngle) {
+    protected void setSweepAngle(float mSweepAngle) {
         this.mSweepAngle = mSweepAngle;
     }
 
-    public void setCenterX(int mCenterX) {
+    protected void setCenterX(int mCenterX) {
         this.mCenterX = mCenterX;
     }
 
-    public void setCenterY(int mCenterY) {
+    protected void setCenterY(int mCenterY) {
         this.mCenterY = mCenterY;
     }
 
-    public void setIsSingle(boolean isSingle) {
+    protected void setIsSingle(boolean isSingle) {
         this.isSingle = isSingle;
     }
 
-    public void setName(String mName) {
-        this.mName = mName;
+    public void setTitle(String title) {
+        this.mTitle = title;
     }
 
-    public String getName() {
-        return mName;
+    public String getTitle() {
+        return mTitle;
     }
 
-    public void setProgressColor() {
-        
+    public void setRatedColor(int color) {
+        ratedPaint.setColor(color);
+    }
+
+    public void setUnRatedColor(int color) {
+        unRatedPaint.setColor(color);
+    }
+
+    public void setTitleColor(int color) {
+        titlePaint.setColor(color);
+    }
+
+    public void setOutlineColor(int color) {
+        outlinePaint.setColor(color);
+    }
+
+    public void setShadowColor(int color) {
+        shadowPaint.setColor(color);
+    }
+
+    public void isShowTitle(boolean isShow) {
+        isShowTitle = isShow;
+    }
+
+    public void setRatingBarColor(int color) {
+        ratedPaint.setColor(color);
+        unRatedPaint.setColor(color);
+        titlePaint.setColor(color);
+        outlinePaint.setColor(color);
+        shadowPaint.setColor(color);
     }
 
     /**
