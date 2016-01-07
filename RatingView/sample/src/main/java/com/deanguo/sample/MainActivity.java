@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.deanguo.ratingview.RatingBar;
+import com.deanguo.library.*;
 import com.deanguo.ratingview.RatingView;
 
 public class MainActivity extends AppCompatActivity {

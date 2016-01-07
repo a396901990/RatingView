@@ -21,7 +21,9 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile project(':library')
+
+//    https://dl.bintray.com/a396901990/maven/com/deanguo/library/1.0.0/
+//    https://dl.bintray.com/com/deanguo/ratingview/ratingview/1.0.0/
 }
