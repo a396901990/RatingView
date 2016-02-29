@@ -65,7 +65,8 @@ Using below method to create your own Ratingbar.
 `setTitleColor(int color)`  
 `setOutlineColor(int color)`  
 `setShadowColor(int color)`  
-
+`setRate(int rate)`  
+`setMaxRate(int maxRate)`  
 ####自定义视图 Custom View
 可以再RatingView中间放置任意视图，比如文字，图片，按钮，布局，控件等  
 You can add any view,layout in RatingView
