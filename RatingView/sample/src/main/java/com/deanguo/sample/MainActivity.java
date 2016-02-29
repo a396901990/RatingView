@@ -1,7 +1,13 @@
 package com.deanguo.sample;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -14,49 +20,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final View btn = this.findViewById(R.id.center_btn);
-        final RatingView view = (RatingView) this.findViewById(R.id.rating_view);
+        showFragment(new DemoOneFragment());
+    }
 
-        final RatingBar bar1 = new RatingBar(5, "难度");
-        final RatingBar bar2 = new RatingBar(8, "风景");
-        final RatingBar bar3 = new RatingBar(3, "路况");
-        final RatingBar bar4 = new RatingBar(4, "天气");
-        view.setAnimatorListener(new RatingView.AnimatorListener() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.demo_one) {
+            showFragment(new DemoOneFragment());
+        } else if (id == R.id.demo_two) {
+            showFragment(new DemoTwoFragment());
+        } else if (id == R.id.demo_three) {
+            showFragment(new DemoThreeFragment());
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void showFragment(final Fragment fragment) {
+        new Handler().post(new Runnable() {
             @Override
-            public void onRotateStart() {
-
-            }
-
-            @Override
-            public void onRotateEnd() {
-                btn.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onRatingStart() {
-
-            }
-
-            @Override
-            public void onRatingEnd() {
-            }
-        });
-        view.addRatingBar(bar1);
-        view.addRatingBar(bar2);
-        view.addRatingBar(bar3);
-        view.addRatingBar(bar4);
-        view.show();
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                view.clear();
-                bar1.setRate(5);
-                bar2.setRate(8);
-                bar3.setRate(3);
-                bar4.setRate(4);
-                view.show();
+            public void run() {
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_view, fragment)
+                        .commit();
             }
         });
     }
+
 }

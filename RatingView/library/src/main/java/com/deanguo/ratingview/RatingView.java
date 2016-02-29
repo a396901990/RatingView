@@ -117,12 +117,16 @@ public class RatingView extends FrameLayout {
         rotateAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                mAnimatorListener.onRotateStart();
+                if (mAnimatorListener != null) {
+                    mAnimatorListener.onRotateStart();
+                }
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mAnimatorListener.onRotateEnd();
+                if (mAnimatorListener != null) {
+                    mAnimatorListener.onRotateEnd();
+                }
                 titleAnimator.start();
                 ratingAnimator.start();
             }
@@ -153,12 +157,16 @@ public class RatingView extends FrameLayout {
         rotateAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                mAnimatorListener.onRatingStart();
+                if (mAnimatorListener != null) {
+                    mAnimatorListener.onRatingStart();
+                }
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mAnimatorListener.onRatingEnd();
+                if (mAnimatorListener != null) {
+                    mAnimatorListener.onRatingEnd();
+                }
             }
 
             @Override
