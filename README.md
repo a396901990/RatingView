@@ -24,7 +24,8 @@ dependencies {
         android:layout_height="200dp">
     </com.deanguo.ratingview.RatingView>
 ```
-之后在代码中调用  // Then using in java code
+之后在代码中调用  
+Then using in java code
 ```Java
 RatingView view = (RatingView) this.findViewById(R.id.rating_view);
         view.addRatingBar(new RatingBar(8, "HARD"));
@@ -54,7 +55,8 @@ RatingView view = (RatingView) this.findViewById(R.id.rating_view);
 RatingBar hard = new RatingBar(8, "HARD");
 hard.setRatingBarColor(getColor(R.color.white));
 ```
-也可以使用下面方法深度定义Ratingbar样式  // Using below method to create your own Ratingbar.
+也可以使用下面方法深度定义Ratingbar样式  
+Using below method to create your own Ratingbar.   
 `setRatedColor(int color)`  
 `setUnRatedColor(int color)`  
 `setTitleColor(int color)`  
@@ -62,7 +64,8 @@ hard.setRatingBarColor(getColor(R.color.white));
 `setShadowColor(int color)`  
 
 ####自定义视图 Custom View
-可以再RatingView中间放置任意视图，比如文字，图片，按钮，布局，控件等 // You can add any view,layout in RatingView
+可以再RatingView中间放置任意视图，比如文字，图片，按钮，布局，控件等  
+You can add any view,layout in RatingView
 ```xml
 <com.deanguo.ratingview.RatingView
         android:id="@+id/rating_view"
@@ -110,7 +113,8 @@ RatingView view = (RatingView) this.findViewById(R.id.rating_view);
         });
 ```
 
-更多使用方法请参考项目中的[sample](/RatingView/sample) // please reference the [sample](/RatingView/sample) code for more information.
+更多使用方法请参考项目中的[sample](/RatingView/sample)  
+please reference the [sample](/RatingView/sample) code for more information.  
 
 ## License
 ```
