@@ -5,6 +5,7 @@
 This custom view is using for rating, scoring, marking. Inspired by 360 mobile security guards.
 
 ## 预览图 Screenshots
+![Main screen](/RatingView/screenshot/screenshot1.gif) ![Main screen](/RatingView/screenshot/screenshot2.gif) 
 ## 集成 Integrate
 *  添加一个dependency到你的`build.gradle`   // Add a dependency to your `build.gradle`:
 ```
