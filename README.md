@@ -20,7 +20,7 @@ dependencies {
 直接将library中的`RatingBar`，`RatingView`，和`attrs.xml`复制到你的项目中去
 
 ## 使用
-###简单使用
+###初始化
 添加`com.deanguo.ratingview.RatingView` 到你的布局文件中：
 ```XML
 <com.deanguo.ratingview.RatingView
@@ -41,7 +41,6 @@ RatingView view = (RatingView) this.findViewById(R.id.rating_view);
 
 ###设置颜色
 #####RatingView
-xml：
 ```xml
 <com.deanguo.ratingview.RatingView
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -50,7 +49,6 @@ xml：
         android:layout_height="200dp"
         app:rating_default_color="@color/white" />
 ```
-code：
 ```java
     RatingView view = (RatingView) this.findViewById(R.id.rating_view);
     view.setDefaultColor(getColor(R.color.white));
@@ -61,7 +59,7 @@ code：
 RatingBar hard = new RatingBar(8, "HARD");
 hard.setRatingBarColor(getColor(R.color.white));
 ```
-也可以根据下面方法深度定义ratingbar样式  
+也可以使用下面方法深度定义ratingbar样式  
 `setRatedColor(int color)`  
 `setUnRatedColor(int color)`  
 `setTitleColor(int color)`  
@@ -118,3 +116,20 @@ RatingView view = (RatingView) this.findViewById(R.id.rating_view);
 ```
 
 更多使用方法请参考项目中的[sample](/RatingView/sample)
+
+## License
+```
+Copyright 2016 Dean Guo
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
