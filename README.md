@@ -40,7 +40,7 @@ RatingView view = (RatingView) this.findViewById(R.id.rating_view);
 ```
 
 ###设置颜色
-####RatingView
+#####RatingView
 xml：
 ```xml
 <com.deanguo.ratingview.RatingView
@@ -56,7 +56,7 @@ code：
     view.setDefaultColor(getColor(R.color.white));
 ```
 
-####RatingBar
+#####RatingBar
 ```java
 RatingBar hard = new RatingBar(8, "HARD");
 hard.setRatingBarColor(getColor(R.color.white));
@@ -116,3 +116,5 @@ RatingView view = (RatingView) this.findViewById(R.id.rating_view);
             }
         });
 ```
+
+更多使用方法请参考项目中的[sample](/ratingview/sample)
