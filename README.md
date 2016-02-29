@@ -1,6 +1,5 @@
 # RatingView 
 
-### 介绍 Introduction
 用来显示评分、评价的自定义视图控件。灵感来源于360手机安全卫士。此控件已经应用在我个人开发的[户外探子](http://android.myapp.com/myapp/detail.htm?apkName=com.dean.travltotibet)，有兴趣的可以看看。
 
 ## 预览图 Screenshots
@@ -16,7 +15,7 @@ dependencies {
 *  或者将[library](/RatingView/library)中的`RatingBar`，`RatingView`，和`attrs.xml`复制到你的项目中去 // Or copy `RatingBar`,`RatingView`,`attrs.xml` from [library](/RatingView/library) to your project
 
 ## 使用 Usage
-###初始化 Initialization
+####初始化 Initialization
 添加`com.deanguo.ratingview.RatingView` 到你的布局文件中： // Add `com.deanguo.ratingview.RatingView` to your layout XML file.
 ```XML
 <com.deanguo.ratingview.RatingView
@@ -35,7 +34,7 @@ RatingView view = (RatingView) this.findViewById(R.id.rating_view);
         view.show();
 ```
 
-###设置颜色 Seting Color
+####设置颜色 Seting Color
 #####RatingView
 ```xml
 <com.deanguo.ratingview.RatingView
@@ -62,7 +61,7 @@ hard.setRatingBarColor(getColor(R.color.white));
 `setOutlineColor(int color)`  
 `setShadowColor(int color)`  
 
-###自定义视图 Custom View
+####自定义视图 Custom View
 可以再RatingView中间放置任意视图，比如文字，图片，按钮，布局，控件等 // You can add any view,layout in RatingView
 ```xml
 <com.deanguo.ratingview.RatingView
@@ -89,7 +88,7 @@ hard.setRatingBarColor(getColor(R.color.white));
         </RelativeLayout>
     </com.deanguo.ratingview.RatingView>
 ```
-###动画监听 Animation Listener
+####动画监听 Animation Listener
 ```java
 RatingView view = (RatingView) this.findViewById(R.id.rating_view);
         view.setAnimatorListener(new RatingView.AnimatorListener() {
