@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.deanguo.ratingview.RatingBar;
-import com.deanguo.library.*;
 import com.deanguo.ratingview.RatingView;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,13 +14,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Button btn = (Button) this.findViewById(R.id.center_btn);
+        final View btn = this.findViewById(R.id.center_btn);
         final RatingView view = (RatingView) this.findViewById(R.id.rating_view);
 
-        final RatingBar bar1 = new RatingBar(8, "难度");
-        final RatingBar bar2 = new RatingBar(8, "难度");
-        final RatingBar bar3 = new RatingBar(8, "难度");
-        final RatingBar bar4 = new RatingBar(8, "难度");
+        final RatingBar bar1 = new RatingBar(5, "难度");
+        final RatingBar bar2 = new RatingBar(8, "风景");
+        final RatingBar bar3 = new RatingBar(3, "路况");
+        final RatingBar bar4 = new RatingBar(4, "天气");
         view.setAnimatorListener(new RatingView.AnimatorListener() {
             @Override
             public void onRotateStart() {
@@ -53,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 view.clear();
                 bar1.setRate(5);
-                bar2.setRate(1);
-                bar2.setRate(3);
+                bar2.setRate(8);
+                bar3.setRate(3);
+                bar4.setRate(4);
                 view.show();
             }
         });
