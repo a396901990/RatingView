@@ -38,7 +38,7 @@ RatingView view = (RatingView) this.findViewById(R.id.rating_view);
         view.show();
 ```
 
-####设置颜色 Seting Color
+####设置颜色 Setting Color
 #####RatingView
 ```xml
 <com.deanguo.ratingview.RatingView
