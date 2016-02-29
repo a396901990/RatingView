@@ -117,4 +117,4 @@ RatingView view = (RatingView) this.findViewById(R.id.rating_view);
         });
 ```
 
-更多使用方法请参考项目中的[sample](/ratingview/sample)
+更多使用方法请参考项目中的[sample](/RatingView/sample)
