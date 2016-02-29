@@ -4,9 +4,16 @@
 
 ### 预览图
 ### 集成
+####方法一：
 添加一个dependency到你的`build.gradle`:
 ```
 dependencies {
     compile 'com.deanguo.ratingview:library:1.1.0'
 }
 ```
+
+####方法二：
+将项目中的library导入到工程中
+
+####方法三：
+直接将library中的`RatingBar`，`RatingView`，和`attrs.xml`复制到你的项目中去
