@@ -2,6 +2,8 @@
 
 用来显示评分、评价的自定义视图控件。灵感来源于360手机安全卫士。此控件已经应用在我个人开发的[户外探子](http://android.myapp.com/myapp/detail.htm?apkName=com.dean.travltotibet)，有兴趣的可以看看。
 
+This custom view is using for rating, scoring, marking. Inspired by 360 mobile security guards.
+
 ## 预览图 Screenshots
 ## 集成 Integrate
 *  添加一个dependency到你的`build.gradle`   // Add a dependency to your `build.gradle`:
@@ -16,7 +18,8 @@ dependencies {
 
 ## 使用 Usage
 ####初始化 Initialization
-添加`com.deanguo.ratingview.RatingView` 到你的布局文件中： // Add `com.deanguo.ratingview.RatingView` to your layout XML file.
+添加`com.deanguo.ratingview.RatingView` 到你的布局文件中  
+Add `com.deanguo.ratingview.RatingView` to your layout XML file.
 ```XML
 <com.deanguo.ratingview.RatingView
         android:id="@+id/rating_view"
