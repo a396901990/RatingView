@@ -10,7 +10,7 @@ This custom view is using for rating, scoring, marking. Inspired by 360 mobile s
 *  添加一个dependency到你的`build.gradle`   // Add a dependency to your `build.gradle`:
 ```
 dependencies {
-    compile 'com.deanguo.ratingview:library:1.1.0'
+    compile 'com.deanguo.ratingview:library:1.3.0'
 }
 ```
 *  或者将[library](/RatingView/library)导入到工程中  // Or import [library](/RatingView/library) as a model to your project
